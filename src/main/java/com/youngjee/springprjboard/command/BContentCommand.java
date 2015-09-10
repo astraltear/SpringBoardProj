@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;
 
 import com.youngjee.springprjboard.dao.BDao;
+import com.youngjee.springprjboard.dto.BDto;
 
 public class BContentCommand implements BCommand {
 
