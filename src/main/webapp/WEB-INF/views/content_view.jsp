@@ -18,9 +18,9 @@
 	<br>
 	<input type="submit" value="수정">
 	
-	<a href="list">목록보기</a>
-	<a href="delete">삭제</a> 
-	<a href="reply">답변</a>
+	<a href="list">목록보기</a><br>
+	<a href="delete?bId=${content_view.bId}">삭제</a> <br>
+	<a href="reply_view?bId=${content_view.bId}">답변</a><br>
 </form>
 </body>
 </html>

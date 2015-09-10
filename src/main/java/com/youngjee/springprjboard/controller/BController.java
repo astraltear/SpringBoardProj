@@ -2,6 +2,8 @@ package com.youngjee.springprjboard.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,11 +17,21 @@ import com.youngjee.springprjboard.command.BModifyCommand;
 import com.youngjee.springprjboard.command.BReplyCommand;
 import com.youngjee.springprjboard.command.BReplyViewCommand;
 import com.youngjee.springprjboard.command.BWriteCommand;
+import com.youngjee.springprjboard.util.Constant;
 
 @Controller
 public class BController {
 	
 	BCommand command;
+	JdbcTemplate template;
+	
+	
+	@Autowired
+	public void setTemplate(JdbcTemplate template) {
+		this.template= template;
+		Constant.template=this.template;
+	}
+	
 	
 	@RequestMapping("/list")
 	public String list(Model model) {
@@ -67,6 +79,17 @@ public class BController {
 		return "redirect:list";
 	}
 	
+	@RequestMapping("/delete")
+	public String delete(HttpServletRequest request, Model model) {
+		
+		model.addAttribute("request", request);
+		command = new BDeleteCommand();
+		command.execute(model);
+		
+		return "redirect:list";
+	}
+	
+	
 	@RequestMapping("/reply_view")
 	public String reply_view(HttpServletRequest request, Model model) {
 		
@@ -82,16 +105,6 @@ public class BController {
 		
 		model.addAttribute("request", request);
 		command = new BReplyCommand();
-		command.execute(model);
-		
-		return "redirect:list";
-	}
-	
-	@RequestMapping("/delete")
-	public String delete(HttpServletRequest request, Model model) {
-		
-		model.addAttribute("request", request);
-		command = new BDeleteCommand();
 		command.execute(model);
 		
 		return "redirect:list";
