@@ -30,8 +30,8 @@
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<beans:property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 		<beans:property name="url" value="jdbc:oracle:thin:@192.168.60.174:1521:ORA92" />
-		<beans:property name="username" value="audien"></beans:property>
-		<beans:property name="password" value="dheldjs"></beans:property>
+		<beans:property name="username" value="test"></beans:property>
+		<beans:property name="password" value="test"></beans:property>
 	</beans:bean>
 
 	<beans:bean name="template" class="org.springframework.jdbc.core.JdbcTemplate">
