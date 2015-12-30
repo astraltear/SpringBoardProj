@@ -39,13 +39,8 @@ public class BDao {
 		}
 	}
 	
-	public ArrayList<BDto> list() {
-		
-		String query="select bid,bnamse,btitle,bcontent,bdate,bhit,bgroup,bstep,bindent from z_board order by bgroup desc, bstep asc ";
-		return (ArrayList<BDto>) template.query(query, new BeanPropertyRowMapper<BDto>(BDto.class));
-		
-		
-/*		ArrayList<BDto> dtos = new ArrayList<BDto>();
+	public ArrayList<BDto> listPure() {
+		ArrayList<BDto> dtos = new ArrayList<BDto>();
 		
 		Connection connection = null;
 		PreparedStatement pstmt = null;
@@ -88,27 +83,21 @@ public class BDao {
 				} 
 		}
 		
-		return  dtos;*/
+		return  dtos;
 	}
 	
-	public void write(final String bName,final String bTitle,final String bContent) {
+	public ArrayList<BDto> list() {
 		
-		template.update(new PreparedStatementCreator() {
-			
-			@Override
-			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
-				String query="insert into z_board(bid,bname,btitle,bcontent,bhit,bgroup,bstep,bindent) values( (select nvl(max(bid),0)+1 from z_board),?,?,?,0,(select nvl(max(bid),0)+1 from z_board),0,0 )  ";
-				PreparedStatement pstmt = conn.prepareStatement(query);
-				pstmt.setString(1, bName);
-				pstmt.setString(2, bTitle);
-				pstmt.setString(3, bContent);
-				
-				return pstmt;
-			}
-		});
+		String query="select bid,bnamse,btitle,bcontent,bdate,bhit,bgroup,bstep,bindent from z_board order by bgroup desc, bstep asc ";
+		return (ArrayList<BDto>) template.query(query, new BeanPropertyRowMapper<BDto>(BDto.class));
 		
 		
-/*		Connection connection = null;
+
+	}
+	
+	public void writePure(final String bName,final String bTitle,final String bContent) {
+		
+		Connection connection = null;
 		PreparedStatement pstmt = null;
 		
 		try {
@@ -135,17 +124,30 @@ public class BDao {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				} 
-		}*/
+		}
 	}
+	
+	public void write(final String bName,final String bTitle,final String bContent) {
+		
+		template.update(new PreparedStatementCreator() {
+			
+			@Override
+			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+				String query="insert into z_board(bid,bname,btitle,bcontent,bhit,bgroup,bstep,bindent) values( (select nvl(max(bid),0)+1 from z_board),?,?,?,0,(select nvl(max(bid),0)+1 from z_board),0,0 )  ";
+				PreparedStatement pstmt = conn.prepareStatement(query);
+				pstmt.setString(1, bName);
+				pstmt.setString(2, bTitle);
+				pstmt.setString(3, bContent);
+				
+				return pstmt;
+			}
+		});
 
-	public BDto contentView(String strId) {
+	}
+	
+	public BDto contentViewPure(String strId) {
 		
-		upHit(strId);
-		
-		String query="select bid,bname,btitle,bcontent,bdate,bhit,bgroup,bstep,bindent from z_board where bid="+strId;
-		return template.queryForObject(query, new BeanPropertyRowMapper<BDto>(BDto.class));
-		
-/*		Connection connection = null;
+		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs  = null;
 		
@@ -187,22 +189,22 @@ public class BDao {
 					e.printStackTrace();
 				} 
 		}
-		return dto;*/
+		return dto;
 	}
 
-	private void upHit(final String strId) {
+	public BDto contentView(String strId) {
 		
-		String query="update z_board set bHit=bHit+1 where bId=?  ";
-		template.update(query, new PreparedStatementSetter() {
-			
-			@Override
-			public void setValues(PreparedStatement ps) throws SQLException {
-				ps.setString(1, strId);
-			}
-		});
+		upHit(strId);
 		
+		String query="select bid,bname,btitle,bcontent,bdate,bhit,bgroup,bstep,bindent from z_board where bid="+strId;
+		return template.queryForObject(query, new BeanPropertyRowMapper<BDto>(BDto.class));
 		
-		/*Connection connection = null;
+
+	}
+	
+	private void upHitPure(final String strId) {
+		
+		Connection connection = null;
 		PreparedStatement pstmt = null;
 		
 		try {
@@ -225,25 +227,26 @@ public class BDao {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				} 
-		}*/
-		
+		}
 	}
-
-	public void modify(final String bId,final String bName,final String bTitle,final String bContent) {
+	
+	private void upHit(final String strId) {
 		
-		String query="update z_board set bname=?,btitle=?,bcontent=? where bid =?  ";
+		String query="update z_board set bHit=bHit+1 where bId=?  ";
 		template.update(query, new PreparedStatementSetter() {
 			
 			@Override
-			public void setValues(PreparedStatement pstmt) throws SQLException {
-				pstmt.setString(1, bName);
-				pstmt.setString(2, bTitle);
-				pstmt.setString(3, bContent);
-				pstmt.setString(4, bId);
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setString(1, strId);
 			}
 		});
+
 		
-/*		Connection connection = null;
+	}
+	
+	public void modifyPure(final String bId,final String bName,final String bTitle,final String bContent) {
+		
+		Connection connection = null;
 		PreparedStatement pstmt = null;
 		
 		try {
@@ -269,22 +272,27 @@ public class BDao {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				} 
-		}*/
+		}
 	}
 
-	public void delete(final String bId) {
-		String query="delete from z_board where bid =?  ";
+	public void modify(final String bId,final String bName,final String bTitle,final String bContent) {
+		
+		String query="update z_board set bname=?,btitle=?,bcontent=? where bid =?  ";
 		template.update(query, new PreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement pstmt) throws SQLException {
-				pstmt.setString(1, bId);
-				
+				pstmt.setString(1, bName);
+				pstmt.setString(2, bTitle);
+				pstmt.setString(3, bContent);
+				pstmt.setString(4, bId);
 			}
 		});
-		
-		
-/*		Connection connection = null;
+
+	}
+	public void deletePure(final String bId) {
+
+		Connection connection = null;
 		PreparedStatement pstmt = null;
 		
 		try {
@@ -307,15 +315,25 @@ public class BDao {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				} 
-		}*/
+		}
 		
 	}
+	public void delete(final String bId) {
+		String query="delete from z_board where bid =?  ";
+		template.update(query, new PreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement pstmt) throws SQLException {
+				pstmt.setString(1, bId);
+				
+			}
+		});
 
-	public BDto reply_view(String strId) {
-		String query="select bid,bname,btitle,bcontent,bdate,bhit,bgroup,bstep,bindent from z_board where bid="+strId;
-		return template.queryForObject(query, new BeanPropertyRowMapper<BDto>(BDto.class));
 		
-/*		Connection connection = null;
+	}
+	
+	public BDto reply_viewPure(String strId) {
+		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs  = null;
 		
@@ -357,30 +375,18 @@ public class BDao {
 					e.printStackTrace();
 				} 
 		}
-		return dto;*/
+		return dto;
 	}
+	
+	public BDto reply_view(String strId) {
+		String query="select bid,bname,btitle,bcontent,bdate,bhit,bgroup,bstep,bindent from z_board where bid="+strId;
+		return template.queryForObject(query, new BeanPropertyRowMapper<BDto>(BDto.class));
+		
 
-	public void reply(String bId,final String bName,final String bTitle,final String bContent, final String bGroup, final String bStep,final String  bIndent) {
-		
-		replyShape(bGroup,bStep);
-		
-		String query="insert into z_board(bid,bname,btitle,bcontent,bgroup,bstep,bindent) values( (select nvl(max(bid),0)+1 from z_board), ?,?,?,?,?,? )  ";
-		template.update(query, new PreparedStatementSetter() {
-			
-			@Override
-			public void setValues(PreparedStatement pstmt) throws SQLException {
-				pstmt.setString(1, bName);
-				pstmt.setString(2, bTitle);
-				pstmt.setString(3, bContent);
-				pstmt.setInt(4, Integer.parseInt(bGroup));
-				pstmt.setInt(5, Integer.parseInt(bStep)+1 );
-				pstmt.setInt(6, Integer.parseInt(bIndent)+1);
-				
-			}
-		});
-		
-		
-/*		Connection connection = null;
+	}
+	
+	public void replyPure(String bId,final String bName,final String bTitle,final String bContent, final String bGroup, final String bStep,final String  bIndent) {
+		Connection connection = null;
 		PreparedStatement pstmt = null;
 		
 		try {
@@ -407,24 +413,31 @@ public class BDao {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				} 
-		}*/
+		}
 	}
 
-	private void replyShape(final String bGroup, final String bStep) {
+	public void reply(String bId,final String bName,final String bTitle,final String bContent, final String bGroup, final String bStep,final String  bIndent) {
 		
-		String query="update z_board set bStep=bStep+1 where bGroup=? and bStep > ?  ";
+		replyShape(bGroup,bStep);
+		
+		String query="insert into z_board(bid,bname,btitle,bcontent,bgroup,bstep,bindent) values( (select nvl(max(bid),0)+1 from z_board), ?,?,?,?,?,? )  ";
 		template.update(query, new PreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement pstmt) throws SQLException {
-				pstmt.setString(1, bGroup);
-				pstmt.setString(2, bStep);
+				pstmt.setString(1, bName);
+				pstmt.setString(2, bTitle);
+				pstmt.setString(3, bContent);
+				pstmt.setInt(4, Integer.parseInt(bGroup));
+				pstmt.setInt(5, Integer.parseInt(bStep)+1 );
+				pstmt.setInt(6, Integer.parseInt(bIndent)+1);
 				
 			}
 		});
+	}
+	private void replyShapePure(final String bGroup, final String bStep) {
 		
-		
-/*		Connection connection = null;
+		Connection connection = null;
 		PreparedStatement pstmt = null;
 		
 		try {
@@ -448,7 +461,22 @@ public class BDao {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				} 
-		}*/
+		}
+	}
+
+	private void replyShape(final String bGroup, final String bStep) {
+		
+		String query="update z_board set bStep=bStep+1 where bGroup=? and bStep > ?  ";
+		template.update(query, new PreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement pstmt) throws SQLException {
+				pstmt.setString(1, bGroup);
+				pstmt.setString(2, bStep);
+				
+			}
+		});
+
 	}
 
 }
