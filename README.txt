@@ -4,7 +4,8 @@ spring jdbc oracle
 mybatis
 JdbcTemplate
 
-기초적인 게시판 구성 기존 JDBC방식 및 JdbcTemplate방식이 비교 구성됨 
+기초적인 게시판 구성 기존 JDBC방식 및 JdbcTemplate방식이 비교 구성됨
+서비스 대신 Command 패턴 사용  
 
 ## 모델에 객체 저장
 	model.addAttribute("request", request);
