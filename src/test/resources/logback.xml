@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		 <encoder>
+	      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+	    </encoder>
+	</appender>
+	
+	<logger name="com.astraltear.mvcbasic1" level="WARN" />
+	
+	<logger name="org.springframework" level="WARN"/>
+	<logger name="org.springframework.web.bind.annotation.support.HandlerMethodInvoker" level="WARN"/>
+	<logger name="org.springframework.web.servlet.DispatcherServlet" level="WARN"/>
+
+	<root level="WARN">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>

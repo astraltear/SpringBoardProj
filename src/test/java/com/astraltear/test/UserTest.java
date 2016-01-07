@@ -1,3 +1,4 @@
+package com.astraltear.test;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
