@@ -9,7 +9,7 @@ JdbcTemplate
 validataion 성공 
 validation test
 maven project 변환
-
+mybatis JUNIT test with h2 database
 
 ## 모델에 객체 저장
 	model.addAttribute("request", request);
